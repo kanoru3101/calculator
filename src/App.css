@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css?family=Share+Tech+Mono');
+
+.App {
+  height: 100vh;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.calculator{
+    min-width: 320px;
+    max-width: 440px;
+    font-family: 'Share Tech Mono';
+    font-size: 25px;
+}
+
+
+.clearStyle{
+  background-color: rgba(255,44,41,0.71);
+}
+
+
+.normalButton {
+  background-color: rgba(63, 60, 62, 0.4);
+}
+
+.button {
+
+  border: none;
+  color: white;
+  padding: 18px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.buttonNormal {
+  background-color: #d4d4d4;
+  color: black;
+  border: 2px solid #555555;
+}
+
+.buttonNormal:hover {
+  background-color: #555555;
+  color: white;
+}
+
+.buttonResult{
+    background-color: #d4d4d4;
+    color: black;
+    border: 2px solid #555555;
+}
+
+.buttonResult:hover {
+    background-color: #f4870d;
+    color: white;
+}
+
+
+.buttonClear {
+    background-color: #d4d4d4;
+  color: black;
+  border: 2px solid #555555;
+}
+
+.buttonClear:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+
+
+.equalHeight{
+  height: 100%;
+}
+
+.col{
+  padding: 0px;
+}
+
+
+
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
