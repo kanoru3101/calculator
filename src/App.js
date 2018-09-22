@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 import "./Buttons.js";
 import { Container, Row, Col, Button } from 'reactstrap';
 import { MathFunctions } from './MathFunctions.js';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faEnvelope, faKey, faSquareRootAlt, faLongArrowAltLeft, faExchangeAlt, faDivide, faPlus, faMinus, faEquals,
     faTimes, faEraser, faPercent} from '@fortawesome/free-solid-svg-icons';
 import {Buttons} from "./Buttons";
@@ -65,7 +65,7 @@ class Calculator extends Component {
         this.handleClearLastSymbol = this.handleClearLastSymbol.bind(this);
         this.changeButtons = this.changeButtons.bind(this);
         this.renderButtons = this.renderButtons.bind(this);
-
+        this.handleInverse = this.handleInverse.bind(this);
     }
 
     //change the type of numeric buttons to math functions
@@ -138,7 +138,6 @@ class Calculator extends Component {
 
 
     }
-
 
 
     handleNumber(e) {
@@ -216,6 +215,17 @@ class Calculator extends Component {
         }
     }
 
+
+    handleInverse(param){
+        if ("0" <= this.state.lastOperator && this.state.lastOperator <= "9"){
+            let lastNumber = this.state.formula.slice(-1);
+            let previousFormula = this.state.formula.slice(0, -1);
+            this.setState({
+                formula: previousFormula + param + lastNumber
+            });
+        }
+    }
+
     renderButtons(){
         if (this.state.typeButtons === "numeric"){
             return(
@@ -234,7 +244,7 @@ class Calculator extends Component {
                 <MathFunctions
                     changeButtons = {this.changeButtons}
                     operator = {this.handleOperators}
-                    inverse = {null}
+                    inverse = {this.handleInverse}
 
                 />
             );
