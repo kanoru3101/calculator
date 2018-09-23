@@ -18,16 +18,16 @@ export class MathFunctions extends Component{
                     <Col xs="12" sm="12">
                         <Row>
                             <Col xs="12" sm="12"  style={paddingStyle}>
-                                <button id="openingBracket" className="button buttonNormal  col-3"  value="(" onClick={e => this.props.operator("(")} >
+                                <button id="openingBracket" className="button buttonNormal  col-3"  value="(" onClick={e => this.props.bracket("(")} >
                                     <b>(</b>
                                 </button>
-                                <button id="closingBracket" className="button buttonNormal col-3"  value=")" onClick={e => this.props.operator(")")} >
+                                <button id="closingBracket" className="button buttonNormal col-3"  value=")" onClick={e => this.props.bracket(")")} >
                                     <b>)</b>
                                 </button>
                                 <button id="multiplicativeInverse" className="button buttonNormal col-3" value="1/" onClick={e => this.props.inverse("1/")}>
                                     <b>1/X</b>
                                 </button>
-                                <button id="percent" className="button buttonNormal col-3" value="*0,01" onClick={e => this.props.operator("*0,01")}>
+                                <button id="percent" className="button buttonNormal col-3" value="*0,01" onClick={e => this.props.handleMathFunction("%")}>
                                     <FontAwesomeIcon icon="percent"/>
                                 </button>
                             </Col>
@@ -62,7 +62,7 @@ export class MathFunctions extends Component{
                                 <button id="point" className="button buttonNormal col-4" value="." onClick={this.props.point}>.</button>
                             </Col>
                             <Col xs="3" sm="3" style={paddingStyle}>
-                                <button id="result" className="button buttonResult equalHeight col-12" value="=" onClick={e => this.props.operator("=")}>=</button>
+                                <button id="result" className="button buttonResult equalHeight col-12" value="=" onClick={this.props.equals}>=</button>
                             </Col>
                         </Row>
                     </Col>

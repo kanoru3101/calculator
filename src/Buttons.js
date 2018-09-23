@@ -11,9 +11,7 @@ export const paddingStyle = {
 
 //Component
 export class Buttons extends Component{
-    constructor(props){
-        super(props)
-    }
+
 
     render(){
         return(
@@ -66,7 +64,7 @@ export class Buttons extends Component{
                                 <button id="point" className="button buttonNormal col-4" value="." onClick={this.props.point}><b>.</b></button>
                             </Col>
                             <Col xs="3" sm="3" style={paddingStyle}>
-                                <button id="result" className="button buttonResult equalHeight col-12" value="=" onClick={e => this.props.operator("=")}>
+                                <button id="result" className="button buttonResult equalHeight col-12" value="=" onClick={this.props.equals}>
                                     <FontAwesomeIcon icon="equals"/>
                                 </button>
                             </Col>
