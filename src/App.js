@@ -46,6 +46,7 @@ class Calculator extends Component {
         this.state = {
             currentOperator: "",
             formula: "",
+            formulaForCalculator: "",
             lastOperator: "",
             result: "0",
             maxDigitLimit: true,
@@ -60,11 +61,11 @@ class Calculator extends Component {
         this.handleClearLastSymbol = this.handleClearLastSymbol.bind(this);
         this.changeButtons = this.changeButtons.bind(this);
         this.renderButtons = this.renderButtons.bind(this);
-        this.handleInverse = this.handleInverse.bind(this);
+        this.handleReverse = this.handleReverse.bind(this);
         this.handleBracket = this.handleBracket.bind(this);
         this.equals = this.equals.bind(this);
-        this.repalceFormula = this.repalceFormula.bind(this);
         this.handleMathFunction = this.handleMathFunction.bind(this);
+        this.percent = this.percent.bind(this);
 
     }
 
@@ -82,25 +83,24 @@ class Calculator extends Component {
     handleOperators(param) {
 
         this.setState({
-            lastOperator: this.state.currentOperator,
-            currentOperator: param
+            lastOperator: "operator",
         });
-
         if (!(this.state.formula === "" && (param === "*" || param === "/" )))
         {
 
-            if (("0" <= this.state.lastOperator && this.state.lastOperator <= "9")){
+            if (this.state.lastOperator === "number" || this.state.lastOperator === "mathFunction"){
                 this.setState({
                     formula: this.state.formula + param,
-                    lastOperator: param
+                    formulaForCalculator: this.state.formulaForCalculator + param
                 });
-
             }
             else {
 
                 // replace operator
                 this.setState({
-                    formula: this.state.formula.slice(0, -1) + param
+                    formula: this.state.formula.slice(0, -1) + param,
+                    formulaForCalculator: this.state.formulaForCalculator.slice(0, -1) + param,
+
                 });
             }
         }
@@ -108,87 +108,86 @@ class Calculator extends Component {
 
     }
 
-    repalceFormula(){
-
-        let newFormula = this.state.formula;
-        newFormula = newFormula.replace("%", "*0.01");
-        console.log(newFormula);
-        this.setState({
-            formula: newFormula
-        });
-        console.log(this.state.formula);
-    }
 
     equals(){
+        if (this.state.lastOperator !== "equals"){
+            try {
+                // if previous operator don`t equal "=" and current operator is "="
+                if (this.state.lastOperator === "operator"){
 
-        this.setState({
-            lastOperator: this.state.currentOperator,
-        });
-        this.repalceFormula();
-        console.log(this.state.formula);
-
-
-        try {
-            // if previous operator don`t equal "=" and current operator is "="
-            if (!("0" <= this.state.lastOperator && this.state.lastOperator <= "9")){
+                    this.setState({
+                        result: eval(this.state.formulaForCalculator.slice(0, -1)),
+                        lastOperator: "equals",
+                        formula: "",
+                        formulaForCalculator: "",
+                        currentOperator: "",
+                    });
+                }
+                else {
+                    this.setState({
+                        result: eval(this.state.formulaForCalculator),
+                        currentOperator: "",
+                        lastOperator: "equals",
+                        formula: "",
+                        formulaForCalculator: "",
+                    });
+                }
+            }
+            catch (e) {
                 this.setState({
-                    result: eval(this.state.formula.slice(0, -1)),
-                    lastOperator: "",
+                    result: "Error in Formula",
+                    currentOperator: "",
+                    lastOperator: "equals",
                     formula: "",
-                    currentOperator: "",
+                    formulaForCalculator: "",
+
                 });
             }
-            else {
-                this.setState({
-                    result: eval(this.state.formula),
-                    currentOperator: "",
-                    lastOperator: "",
-                    formula: ""
-                });
-            }
-        }
-        catch (e) {
-            this.setState({
-                result: "Error in Formula",
-                currentOperator: "",
-                lastOperator: "",
-                formula: ""
-            });
         }
     }
 
 
     handleNumber(e) {
-
         if (!(this.state.formula === "0")) {
             this.setState({
                 formula: this.state.formula + e.target.value,
-                lastOperator: e.target.value,
+                formulaForCalculator: this.state.formulaForCalculator + e.target.value,
+                lastOperator: "number",
                 maxDigitLimit: this.state.formula.length >= 21 ? false : true,
             })
         }
         else if (!(e.target.value === "0")) {
             this.setState({
                 formula: e.target.value,
+                formulaForCalculator: e.target.value,
                 lastOperator: e.target.value,
             })
         }
     }
 
     handleMathFunction(param){
+        let newParam = null;
+
+        if (param === "%"){
+            newParam = "*0.01"
+        }
+
+
+
         this.setState({
             formula: this.state.formula + param,
-            lastOperator: "0000"
+            formulaForCalculator: this.state.formulaForCalculator + newParam,
+            lastOperator: "mathFunction"
         })
 
     }
 
 
     handleClear(){
-
         this.setState({
             currentOperator: "",
             formula: "",
+            formulaForCalculator: "",
             lastOperator: "",
             result: "0",
             maxDigitLimit: true
@@ -198,8 +197,10 @@ class Calculator extends Component {
 
     handleClearLastSymbol(){
         let newFormula = this.state.formula;
+
         this.setState({
             formula: newFormula.substring(0, newFormula.length - 1),
+            formulaForCalculator: this.state.formulaForCalculator.substring(0, this.state.formulaForCalculator.length - 1),
             maxDigitLimit: newFormula.substring(0, newFormula.length - 1).length > 21 ? false : true,
         });
 
@@ -210,10 +211,10 @@ class Calculator extends Component {
 
         if (this.state.lastOperator !== '.') {
             if (this.state.formula === "") {
-
                 this.setState({
                     formula: "0.",
-                    lastOperator: ".",
+                    formulaForCalculator: "0.",
+                    lastOperator: "point",
                 });
             }
             else {
@@ -229,7 +230,8 @@ class Calculator extends Component {
                     if (isDecimal === -1) {
                         this.setState({
                             formula: this.state.formula + ".",
-                            lastOperator: ".",
+                            formulaForCalculator: this.state.formulaForCalculator + ".",
+                            lastOperator: "point",
                         });
                     }
                 }
@@ -240,21 +242,54 @@ class Calculator extends Component {
     }
 
 
-    handleInverse(param){
-        if ("0" <= this.state.lastOperator && this.state.lastOperator <= "9"){
-            let lastNumber = this.state.formula.slice(-1);
-            let previousFormula = this.state.formula.slice(0, -1);
+    handleReverse(){
+        if (this.state.lastOperator === "number" || this.state.lastOperator === "mathFunction"){
+
+            let regex = /[\d\.]+$|\([\d\+\-\*\s]+\)$/;
+
+            let foundNumber = this.state.formulaForCalculator.match(regex);
+            foundNumber = "(1/" + foundNumber + ")";
+            foundNumber = eval(foundNumber);
+
+            let newStringForCalculator = this.state.formulaForCalculator.replace(regex, foundNumber)
+            let newString = this.state.formulaForCalculator.replace(regex, foundNumber)
+
             this.setState({
-                formula: previousFormula + param + lastNumber
+                formula: newString,
+                formulaForCalculator: newStringForCalculator,
+                lastOperator: "mathFunction"
+            });
+        }
+
+        if (this.state.result !== "0" && this.state.result !== null){
+
+            this.setState({
+                result: 1/this.state.result,
+                lastOperator: "mathFunction"
             });
         }
     }
 
 
+    percent(){
+        //find the number by the percentage
+
+        if (this.state.result && this.state.result !== "0"){
+            //if is result
+            let formula = this.state.result + "*" + this.state.formulaForCalculator + "/100";
+            this.setState({
+                result: eval(formula),
+                lastOperator: "mathFunction"
+            });
+        }
+    }
+
 
     handleBracket(bracket){
         this.setState({
-            formula: this.state.formula + bracket
+            formula: this.state.formula + bracket,
+            formulaForCalculator: this.state.formulaForCalculator + bracket,
+            lastOperator: "mathFunction"
         });
     }
 
@@ -278,9 +313,10 @@ class Calculator extends Component {
                 <MathFunctions
                     changeButtons = {this.changeButtons}
                     operator = {this.handleOperators}
-                    inverse = {this.handleInverse}
                     bracket = {this.handleBracket}
                     equals = {this.equals}
+                    reverse = {this.handleReverse}
+                    percent = {this.percent}
                     handleMathFunction = {this.handleMathFunction}
                 />
             );
@@ -295,8 +331,9 @@ class Calculator extends Component {
                         <Col xs="12">
                             <CalculatorLabels
                                 result={this.state.result}
-
+                                formulaForCalculator = {this.state.formulaForCalculator}
                                 formula={this.state.maxDigitLimit ? this.state.formula : "MAX LIMIT"}
+
                             />
                         </Col>
                         <Col xs="12">

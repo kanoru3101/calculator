@@ -24,10 +24,10 @@ export class MathFunctions extends Component{
                                 <button id="closingBracket" className="button buttonNormal col-3"  value=")" onClick={e => this.props.bracket(")")} >
                                     <b>)</b>
                                 </button>
-                                <button id="multiplicativeInverse" className="button buttonNormal col-3" value="1/" onClick={e => this.props.inverse("1/")}>
+                                <button id="multiplicativeInverse" className="button buttonNormal col-3" value="1/" onClick={e => this.props.reverse("1/")}>
                                     <b>1/X</b>
                                 </button>
-                                <button id="percent" className="button buttonNormal col-3" value="*0,01" onClick={e => this.props.handleMathFunction("%")}>
+                                <button id="percent" className="button buttonNormal col-3" value="*0,01" onClick={e => this.props.percent("%")}>
                                     <FontAwesomeIcon icon="percent"/>
                                 </button>
                             </Col>
@@ -62,7 +62,9 @@ export class MathFunctions extends Component{
                                 <button id="point" className="button buttonNormal col-4" value="." onClick={this.props.point}>.</button>
                             </Col>
                             <Col xs="3" sm="3" style={paddingStyle}>
-                                <button id="result" className="button buttonResult equalHeight col-12" value="=" onClick={this.props.equals}>=</button>
+                                <button id="result" className="button buttonResult equalHeight col-12" value="=" onClick={this.props.equals}>
+                                    <FontAwesomeIcon icon="equals"/>
+                                </button>
                             </Col>
                         </Row>
                     </Col>
