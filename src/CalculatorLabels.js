@@ -26,7 +26,7 @@ export class CalculatorLabels extends Component{
         return(
             <div>
                 <div style={{...calculatorLabelsStyle, ...resultStyle}}>{this.props.result}</div>
-                {/*<div style={calculatorLabelsStyle}>{this.props.formulaForCalculator}</div>*/}
+                <div style={calculatorLabelsStyle}>{this.props.formulaForCalculator}</div>
                 <div style={calculatorLabelsStyle}>{this.props.formula}</div>
             </div>
         );

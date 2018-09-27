@@ -65,7 +65,11 @@ class Calculator extends Component {
         this.handleBracket = this.handleBracket.bind(this);
         this.equals = this.equals.bind(this);
         this.handleMathFunction = this.handleMathFunction.bind(this);
+        this.handleRoot = this.handleRoot.bind(this);
         this.percent = this.percent.bind(this);
+        this.power = this.power.bind(this);
+        this.nPower = this.nPower.bind(this);
+
 
     }
 
@@ -88,11 +92,23 @@ class Calculator extends Component {
         if (!(this.state.formula === "" && (param === "*" || param === "/" )))
         {
 
-            if (this.state.lastOperator === "number" || this.state.lastOperator === "mathFunction"){
+            if (this.state.lastOperator === "number" ||
+                this.state.lastOperator === "mathFunction" ||
+                this.state.lastOperator === "nPower"
+               ){
+
                 this.setState({
                     formula: this.state.formula + param,
                     formulaForCalculator: this.state.formulaForCalculator + param
                 });
+
+                if(this.state.lastOperator === "nPower"){
+                    this.setState({
+                        lastOperator: "nPower",
+                        formulaForCalculator: this.state.formulaForCalculator,
+                    });
+
+                }
             }
             else {
 
@@ -147,22 +163,30 @@ class Calculator extends Component {
     }
 
 
-    handleNumber(e) {
-        if (!(this.state.formula === "0")) {
-            this.setState({
-                formula: this.state.formula + e.target.value,
-                formulaForCalculator: this.state.formulaForCalculator + e.target.value,
-                lastOperator: "number",
-                maxDigitLimit: this.state.formula.length >= 21 ? false : true,
-            })
+    handleNumber(number) {
+        if (this.state.lastOperator === "nPower"){
+            this.nPower(number);
         }
-        else if (!(e.target.value === "0")) {
-            this.setState({
-                formula: e.target.value,
-                formulaForCalculator: e.target.value,
-                lastOperator: e.target.value,
-            })
+
+        else {
+            if (!(this.state.formula === "0")) {
+                this.setState({
+                    formula: this.state.formula + number,
+                    formulaForCalculator: this.state.formulaForCalculator + number,
+                    lastOperator: "number",
+                    maxDigitLimit: this.state.formula.length >= 21 ? false : true,
+                })
+            }
+            else if (!(number === "0")) {
+                this.setState({
+                    formula: number,
+                    formulaForCalculator: number,
+                    lastOperator: number,
+                })
+            }
         }
+
+
     }
 
     handleMathFunction(param){
@@ -242,6 +266,8 @@ class Calculator extends Component {
     }
 
 
+
+
     handleReverse(){
         if (this.state.lastOperator === "number" || this.state.lastOperator === "mathFunction"){
 
@@ -273,7 +299,7 @@ class Calculator extends Component {
 
     percent(){
         //find the number by the percentage
-
+        console.log("percent");
         if (this.state.result && this.state.result !== "0"){
             //if is result
             let formula = this.state.result + "*" + this.state.formulaForCalculator + "/100";
@@ -285,12 +311,116 @@ class Calculator extends Component {
     }
 
 
+    handleRoot(param){
+
+        let regex = /[\d\.]+$|\([\d\+\-\*\s]+\)$/;
+        let foundNumber = this.state.formulaForCalculator.match(regex);
+        let foundNumberUserVersion = this.state.formula.match(regex);
+        let foundNumberForUser = param + foundNumberUserVersion[0];
+        let newStringForUser = this.state.formula.replace(regex, foundNumberForUser);
+
+        if (param === "√"){
+
+            let foundNumberForCalculator = Math.sqrt(eval(foundNumber[0]));
+            let newStringForCalculator = this.state.formulaForCalculator.replace(regex, foundNumberForCalculator);
+
+            this.setState({
+                formula: newStringForUser,
+                formulaForCalculator: newStringForCalculator,
+                lastOperator: "mathFunction"
+            });
+        }
+
+        if (param === "∛"){
+
+            let foundNumberForCalculator = Math.cbrt(eval(foundNumber[0]));
+            let newStringForCalculator = this.state.formulaForCalculator.replace(regex, foundNumberForCalculator);
+
+            this.setState({
+                formula: newStringForUser,
+                formulaForCalculator: newStringForCalculator,
+                lastOperator: "mathFunction"
+            });
+        }
+
+
+    }
+
+
+    power(param){
+        if (param === "2"){
+
+            let regex = /[\d\.]+$|\([\d\+\-\*\s]+\)$/;
+            let foundNumber = this.state.formulaForCalculator.match(regex);
+            let foundNumberUserVersion = this.state.formula.match(regex);
+
+            let foundNumberForUser = foundNumberUserVersion[0] + "^(2)";
+            let foundNumberForCalculator = Math.pow(eval(foundNumber[0]), 2);
+
+            let newStringForUser = this.state.formula.replace(regex, foundNumberForUser);
+            let newStringForCalculator = this.state.formulaForCalculator.replace(regex, foundNumberForCalculator);
+
+            this.setState({
+                formula: newStringForUser,
+                formulaForCalculator: newStringForCalculator,
+                lastOperator: "mathFunction"
+            });
+        }
+
+    }
+
+
+    nPower(number){
+
+        if (number === "y"){
+            this.setState({
+                formula: this.state.formula + "^(",
+                lastOperator: "nPower"
+            });
+        }
+
+        else {
+            let basis = /\d\^|\([\d\.\+\-\*\-]+\)\^/; //
+            let endRegex = /\(\-$|\($/; //search minus degree
+            let regex = /[\d\.]+$|\([\d\+\-\*\s]+\)$/; // for sting FormulaForCalculator
+
+
+            if (this.state.formula.match(/\(\-$/)){ // if the number is negative
+                number = "-" + number;
+            }
+
+            //for Calculator Display
+            let foundBasis = this.state.formula.match(basis);
+            foundBasis = foundBasis[0].slice(0, -1); //delete symbol "^"
+            let foundNumberForCalculator = Math.pow(eval(foundBasis), number);
+            let newStringForCalculator = this.state.formulaForCalculator.replace(regex, foundNumberForCalculator);
+
+            //for User Display
+            let foundNumberUserVersion = this.state.formula.match(endRegex);
+            let foundNumberForUser = "(" + number + ")";
+            let newStringForUser = this.state.formula.replace(endRegex, foundNumberForUser);
+
+
+            this.setState({
+                formulaForCalculator: newStringForCalculator,
+                formula: newStringForUser,
+                lastOperator: "mathFunction"
+            })
+        }
+
+    }
+
+
     handleBracket(bracket){
+
         this.setState({
             formula: this.state.formula + bracket,
             formulaForCalculator: this.state.formulaForCalculator + bracket,
             lastOperator: "mathFunction"
         });
+
+        if (this.state.lastOperator === "nPower") this.nPower(")");
+
     }
 
 
@@ -317,6 +447,9 @@ class Calculator extends Component {
                     equals = {this.equals}
                     reverse = {this.handleReverse}
                     percent = {this.percent}
+                    nRoot = {this.handleRoot}
+                    power = {this.power}
+                    nPower = {this.nPower}
                     handleMathFunction = {this.handleMathFunction}
                 />
             );
