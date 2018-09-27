@@ -39,7 +39,7 @@ export class MathFunctions extends Component{
                                 <button id="cubeRoot" className="button buttonNormal col-3" value="cubeRoot"  onClick={e => this.props.nRoot("∛")}>
                                     <b>&#x221B;x</b>
                                 </button>
-                                <button id="quarePow" className="button buttonNormal col-3" value="quarePow" onClick={e => this.props.power("2")}>
+                                <button id="quarePow" className="button buttonNormal col-3" value="quarePow" onClick={e => this.props.quarePower("2")}>
                                     <b>X<sup>2</sup></b>
                                 </button>
                                 <button id="nPow" className="button buttonNormal col-3" value="nPow" onClick={e => this.props.nPower("y")}>
@@ -47,7 +47,9 @@ export class MathFunctions extends Component{
                                 </button>
                             </Col>
                             <Col xs="12" sm="12" style={paddingStyle}>
-                                <button id="4" className="button buttonNormal col-3" value="4" onClick={this.props.number}>?</button>
+                                <button id="remainingFromDivision" className="button buttonNormal col-3" value="remainingFromDivision" onClick={e => this.props.operator("%")}>
+                                    <b>Mod</b>
+                                </button>
                                 <button id="5" className="button buttonNormal col-3" value="5" onClick={this.props.number}>?</button>
                                 <button id="6" className="button buttonNormal col-3" value="6" onClick={this.props.number}>?</button>
                                 <button id="add" className="button buttonNormal col-3" value="+" onClick={this.props.operator}>?</button>

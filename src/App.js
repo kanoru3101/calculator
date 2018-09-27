@@ -69,6 +69,7 @@ class Calculator extends Component {
         this.percent = this.percent.bind(this);
         this.power = this.power.bind(this);
         this.nPower = this.nPower.bind(this);
+        this.remainingFromDivision = this.remainingFromDivision.bind(this);
 
 
     }
@@ -89,7 +90,7 @@ class Calculator extends Component {
         this.setState({
             lastOperator: "operator",
         });
-        if (!(this.state.formula === "" && (param === "*" || param === "/" )))
+        if (!(this.state.formula === "" && (param === "*" || param === "/" || param === "%" )))
         {
 
             if (this.state.lastOperator === "number" ||
@@ -109,6 +110,11 @@ class Calculator extends Component {
                     });
 
                 }
+
+                if(param === "%"){
+                    this.setState({formula: this.state.formula + "Mod"});
+                }
+
             }
             else {
 
@@ -411,6 +417,11 @@ class Calculator extends Component {
     }
 
 
+    remainingFromDivision(){
+
+    }
+
+
     handleBracket(bracket){
 
         this.setState({
@@ -448,8 +459,9 @@ class Calculator extends Component {
                     reverse = {this.handleReverse}
                     percent = {this.percent}
                     nRoot = {this.handleRoot}
-                    power = {this.power}
+                    quarePower = {this.power}
                     nPower = {this.nPower}
+                    remainingFromDivision = {this.remainingFromDivision}
                     handleMathFunction = {this.handleMathFunction}
                 />
             );
