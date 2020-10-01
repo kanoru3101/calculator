@@ -16,10 +16,6 @@ export const calculatorLabelsStyle = {
     paddingTop: "5px"
 }
 
-
-
-
-
 export class CalculatorLabels extends Component{
 
     render(){
